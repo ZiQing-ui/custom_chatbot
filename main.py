@@ -18,7 +18,7 @@ def extract_text_from_pdf(pdf_file):
 def stream_llama_response(prompt):
     try:
         payload = {
-            "model": "llama3.1",  # Ensure this matches your model name in Ollama
+            "model": "llama3",  # Ensure this matches your model name in Ollama
             "prompt": prompt,
             "stream": True
         }
