@@ -1,2 +1,3 @@
 streamlit
 langchain-community
+PyPDF2
