@@ -1,32 +1,19 @@
-import requests
+import streamlit as st
+from langchain_community.llms import Ollama
 
-def get_response(user_input):
-    try:
-        payload = {
-            "model": "llama3.1",  # Change if using a different model
-            "prompt": user_input,
-            "stream": False
-        }
-        response = requests.post("http://localhost:11434/api/generate", json=payload)
-        response.raise_for_status()
-        output = response.json()
-        return output.get("response", "No response received.")
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
+# Initialize LLM
+llm = Ollama(model="llama3")  # or use "llama3:latest" if needed
 
-def main():
-    print("Welcome to the Local LLaMA Chatbot! (Type 'quit' to exit)")
-    print("-" * 50)
-    
-    while True:
-        user_input = input("You: ")
-        if user_input.lower() in ['quit', 'exit']:
-            print("Goodbye!")
-            break
-            
-        response = get_response(user_input)
-        print(f"Bot: {response.strip()}")
-        print("-" * 50)
+# Streamlit UI
+st.title("🦙 Chat with LLaMA 3 (Local via Ollama)")
 
-if __name__ == "__main__":
-    main()
+prompt = st.text_area("Enter your prompt:", height=150)
+
+if st.button("Generate"):
+    if prompt.strip() != "":
+        with st.spinner("Generating response..."):
+            response = llm.invoke(prompt)
+            st.markdown("### 💬 Response:")
+            st.write(response)
+    else:
+        st.warning("Please enter a prompt.")
